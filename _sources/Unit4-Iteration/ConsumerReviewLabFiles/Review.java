@@ -170,20 +170,48 @@ public class Review {
   public static double totalSentiment(String filename)
   {
     // read in the file contents into a string using the textToString method with the filename
-
+    String file = " " + textToString(filename) + " ";
     // set up a sentimentTotal variable
     double sentimentTotal = 0;
 
     // loop through the file contents 
-
+    for (int i = 0; i < file.length(); i ++)
+    {
+        String word = "";
        // find each word
        // add in its sentimentVal
        // set the file contents to start after this word
-   
-   
-
-
-
+       if (file.substring(i, i+1).equals(" "))
+       {
+           for (int x = i-1; x >= 0; x--)
+           {
+               
+               if (file.substring(x, x+1).equals(" "))
+               {
+                   word = file.substring(x+1, i);
+                   String word2 = word;
+                   String word3 = "";
+                   for (int y = 0; y < word.length(); y++)
+                   {
+                       if (y < word2.length())
+                       {
+                         if (word2.substring(y, y+1).equals("(") || word2.substring(y, y+1).equals(".") ||word2.substring(y, y+1).equals(",") ||word2.substring(y, y+1).equals(":") ||word2.substring(y, y+1).equals(")") || word2.substring(y, y+1).equals("!") || word2.substring(y, y+1).equals("?"))
+                         {
+                                word2 = word2.substring(0, y) + word2.substring(y+1);
+                         }
+                         else if (word2.substring(y, y+1).equals("/"))
+                         {
+                             word3 = word2.substring(0, y);
+                             word2 = word2.substring(y+1);
+                         }
+                        }
+                   }
+                   x = -1;
+                   sentimentTotal += sentimentVal(word2) + sentimentVal(word3);
+               }
+           }
+       }
+    }
    return sentimentTotal; 
   }
 
@@ -194,13 +222,20 @@ public class Review {
   public static int starRating(String filename)
   {
     // call the totalSentiment method with the fileName
-
+    double totalSentiments = totalSentiment(filename);
     // determine number of stars between 0 and 4 based on totalSentiment value 
     int stars = 0; // change this!
     // write if statements here
-
-
-  
+    if (totalSentiments >= 20)
+        stars = 4;
+    else if (totalSentiments >= 10)
+        stars = 3;
+    else if(totalSentiments >= 0)
+        stars = 2;
+    else if(totalSentiments >= -10)
+        stars = 1;
+    else
+        stars = 0;
     // return number of stars
     return stars; 
   }
